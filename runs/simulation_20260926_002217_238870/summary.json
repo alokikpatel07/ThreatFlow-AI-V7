@@ -1,0 +1,25 @@
+{
+  "flows": 117,
+  "normal_flows": 75,
+  "alert_count": 42,
+  "average_latency_ms": 66.311,
+  "average_end_to_end_latency_ms": 66.311,
+  "threat_classes": {
+    "Encrypted-session metadata anomaly": 8,
+    "SYN flood": 1,
+    "Recon / port scan": 30,
+    "Possible data exfiltration": 3
+  },
+  "severity_counts": {
+    "medium": 8,
+    "critical": 1,
+    "high": 33
+  },
+  "detection_methods": {
+    "behavioural_rule": 38,
+    "machine_learning": 4
+  },
+  "run_type": "simulation",
+  "run_id": "20260926_002217_238870",
+  "completed_at": "2026-09-25T18:52:32.182013+00:00"
+}

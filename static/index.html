@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ThreatFlow AI — V7</title>
+  <style>
+    :root {
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f7f9fc, #edf3f9 55%, #f8fbff)
+    }
+
+    header {
+      padding: 22px 28px;
+      border-bottom: 1px solid #dbe4ef;
+      background: rgba(255, 255, 255, .92);
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      backdrop-filter: blur(10px)
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: #718096;
+      font-size: 13px
+    }
+
+    .container {
+      max-width: 1450px;
+      margin: auto;
+      padding: 22px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px
+    }
+
+    .card {
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid #dce5ef;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 25px #0004
+    }
+
+    .metric {
+      font-size: 28px;
+      font-weight: 700
+    }
+
+    .muted {
+      color: #718096;
+      font-size: 12px
+    }
+
+    .good {
+      color: #68d391
+    }
+
+    .bad {
+      color: #ff7b7b
+    }
+
+    .warn {
+      color: #ffd166
+    }
+
+    section {
+      margin-top: 16px
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto auto;
+      gap: 10px;
+      align-items: end
+    }
+
+    label {
+      display: block;
+      color: #52637a;
+      font-size: 12px;
+      margin-bottom: 6px
+    }
+
+    select,
+    input,
+    button {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #cbd7e4;
+      background: #fff;
+      color: #172033;
+      padding: 10px
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600
+    }
+
+    .primary {
+      background: #356ae6;
+      color: #fff
+    }
+
+    .danger {
+      background: #c83e5a;
+      color: #fff
+    }
+
+    .upload {
+      border: 1px dashed #406178;
+      padding: 16px
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 99px;
+      font-size: 11px;
+      background: #132535;
+      color: white;
+      margin-left: 6px
+    }
+
+    .chart {
+      height: 260px;
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      padding: 18px 8px 30px;
+      border-top: 1px solid #203040;
+      margin-top: 10px
+    }
+
+    .barwrap {
+      height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      align-items: center;
+      min-width: 45px
+    }
+
+    .bar {
+      width: 70%;
+      min-height: 2px;
+      border-radius: 5px 5px 0 0;
+      background: #4aa3df
+    }
+
+    .barlabel {
+      font-size: 10px;
+      color: #718096;
+      margin-top: 7px;
+      text-align: center
+    }
+
+    .barvalue {
+      font-size: 11px;
+      margin-bottom: 4px
+    }
+
+    .events {
+      max-height: 560px;
+      overflow: auto
+    }
+
+    .event {
+      border-bottom: 1px solid #e4eaf1;
+      padding: 10px 2px
+    }
+
+    .event strong {
+      font-size: 13px
+    }
+
+    .event small {
+      color: #718096
+    }
+
+    .pill {
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      margin-left: 6px;
+      background: #162635;
+      color: wheat;
+    }
+
+    .alert {
+      color: #ff9b9b
+    }
+
+    .normal {
+      color: #72d6a0
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px
+    }
+
+    .summary-item {
+      background: #f8fafc;
+      border: 1px solid #dbe4ef;
+      padding: 12px;
+      border-radius: 8px
+    }
+
+    .runs {
+      max-height: 220px;
+      overflow: auto
+    }
+
+    .runrow {
+      padding: 8px;
+      border-bottom: 1px solid #e4eaf1;
+      cursor: pointer
+    }
+
+    .runrow:hover {
+      background: #eef4ff
+    }
+
+    .notice {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #eef6ff;
+      color: #355a8a;
+      font-size: 12px
+    }
+
+    @media(max-width:900px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .controls {
+        grid-template-columns: 1fr
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:550px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+
+      .container {
+        padding: 12px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>ThreatFlow AI — One-Way Passive Threat Detection <span class="status">READ ONLY</span><span class="status">NO
+        RETURN PATH</span><span class="status">NO DECRYPTION</span></h1>
+    <!-- <p>Passive traffic intelligence • synthetic replay + offline PCAP analysis • no probes or blocking</p> -->
+  </header>
+  <main class="container">
+    <div class="grid">
+      <!-- <div class="card">
+        <div class="muted">AI/ML model</div>
+        <div id="mlstatus" class="metric">Loading</div>
+        <div id="mlmetric" class="muted">Validation</div>
+      </div> -->
+      <div class="card">
+        <div class="muted">Processed events</div>
+        <div id="processed" class="metric">0</div>
+      </div>
+      <div class="card">
+        <div class="muted">Threat alerts</div>
+        <div id="alerts" class="metric bad">0</div>
+      </div>
+      <div class="card">
+        <div class="muted">Normal events</div>
+        <div id="normal" class="metric good">0</div>
+      </div>
+      <div class="card">
+        <div class="muted">Avg detection latency</div>
+        <div id="latency" class="metric">0 ms</div>
+      </div>
+    </div>
+
+    <section class="card">
+      <h3>Live traffic simulation</h3>
+      <div class="controls">
+        <div><label>Traffic profile</label><select id="scenario"></select></div>
+        <div><label>Flows per second</label><input id="rate" type="number" min="1" max="500" value="20"></div>
+        <div><label>Duration (seconds) — 0 = infinite until Stop</label><input id="seconds" type="number" min="0"
+            max="3600" value="0"></div>
+        <button class="primary" onclick="startSim()">Start</button>
+        <button class="danger" onclick="stopSim()">Stop</button>
+      </div>
+      <div id="simstatus" class="notice" style="margin-top:12px">Ready. Duration 0 runs continuously until Stop.</div>
+    </section>
+
+    <section class="card">
+      <h3>PCAP file analysis</h3>
+      <div class="upload">
+        <input id="pcap" type="file" accept=".pcap,.pcapng,.cap">
+        <button class="primary" style="margin-top:10px" onclick="uploadPcap()">Analyze PCAP offline</button>
+        <div id="pcapstatus" class="notice" style="margin-top:10px">Select a capture. The file is traversed offline; no
+          packets are transmitted.</div>
+      </div>
+    </section>
+
+    <!-- <section class="card">
+      <h3>AI/ML + Threat Intelligence</h3>
+      <div id="intel" class="notice">Loading model and IOC status...</div>
+    </section> -->
+
+    <section class="card">
+      <h3>Detected-threat summary</h3>
+      <div id="chart" class="chart">
+        <div class="muted">No alerts yet.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Complete run summary</h3>
+      <div id="summary" class="summary-grid">
+        <div class="summary-item">No completed run yet.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Live threat & event feed</h3>
+      <div class="muted" style="margin-bottom:8px">Shows normal traffic and every detected alert with per-event detector
+        latency.</div>
+      <div id="events" class="events"></div>
+    </section>
+
+    <section class="card">
+      <h3>Previous saved runs</h3>
+      <div class="muted" style="margin-bottom:8px">Each run is saved separately and can be reopened without overwriting
+        earlier output.</div>
+      <div id="runs" class="runs"></div>
+    </section>
+  </main>
+  <script>
+    const $ = id => document.getElementById(id);
+    let counts = {}, eventCount = 0, alertCount = 0, normalCount = 0, latencySum = 0;
+
+    async function api(url, opt = {}) { const r = await fetch(url, opt); const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.detail || 'Request failed'); return j }
+    async function init() {
+      api('/api/ml').then(x => { $('mlstatus').textContent = x.trained ? 'ACTIVE' : 'OFF'; $('mlmetric').textContent = `Random Forest • accuracy ${(Number(x.evaluation.accuracy || 0) * 100).toFixed(1)}%`; }).catch(() => { });
+      api('/api/threat-intelligence').then(x => { $('intel').textContent = `Local IOC feed: ${x.ips} IPs • ${x.domains} domains • ${x.tls_fingerprints} TLS fingerprints. No external connection.`; }).catch(() => { });
+      const x = await api('/api/scenarios'); $('scenario').innerHTML = x.scenarios.map(s => {
+        const names = {
+          benign: "Benign Traffic",
+          mixed: "Mixed Threat Traffic",
+          syn_flood: "DDoS / SYN Flood",
+          beacon: "C2 Beaconing",
+          dga: "DGA Domain Detection",
+          dns_tunnel: "DNS Tunnelling",
+          tls_anomaly: "Encrypted Traffic Anomaly",
+          scan: "Reconnaissance Port Scan",
+          data_exfiltration: "Data Exfiltration"
+        }; return `<option value = "${s}">${names[s] || s}</option>`;
+      }).join('');
+      loadRuns();
+      const st = await api('/api/state'); if (st.flows) renderState(st);
+    }
+    function renderState(st) {
+      $('processed').textContent = st.flows || 0; $('alerts').textContent = st.alerts || 0; $('normal').textContent = st.normal || 0;
+      $('latency').textContent = (st.average_latency_ms || 0).toFixed(3) + ' ms';
+    }
+    function resetView() {
+      counts = {}; eventCount = 0; alertCount = 0; normalCount = 0; latencySum = 0;
+      $('events').innerHTML = ''; renderStats();
+    }
+    function renderStats() {
+      $('processed').textContent = eventCount; $('alerts').textContent = alertCount; $('normal').textContent = normalCount;
+      $('latency').textContent = (eventCount ? latencySum / eventCount : 0).toFixed(3) + ' ms';
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      if (!entries.length) { $('chart').innerHTML = '<div class="muted">No alerts yet.</div>'; return }
+      const max = Math.max(...entries.map(x => x[1]), 1);
+      $('chart').innerHTML = entries.map(([k, v]) => `<div class="barwrap"><div class="barvalue">${v}</div><div class="bar" style="height:${Math.max(2, v / max * 82)}%"></div><div class="barlabel">${esc(k)}</div></div>`).join('');
+    }
+    function addEvent(e) {
+      eventCount++; latencySum += Number(e.latency_ms || 0);
+      if (e.alert) { alertCount++; counts[e.alert.threat_class] = (counts[e.alert.threat_class] || 0) + 1 }
+      else normalCount++;
+      const f = e.flow || {}, a = e.alert;
+      const row = document.createElement('div'); row.className = 'event';
+      row.innerHTML = a
+        ? `<strong class="alert">ALERT — ${esc(a.threat_class)}</strong><span class="pill">${esc(a.severity)}</span><span class="pill">${(a.confidence * 100).toFixed(0)}%</span><br><small>${esc(f.flow_id)} • ${esc(f.src_ip)} → ${esc(f.dst_ip)} • latency ${Number(e.latency_ms).toFixed(3)} ms • method ${esc(a.evidence?.detection_method || 'behavioural_rule')} • evidence ${esc(JSON.stringify(a.evidence))}</small>`
+        : `<strong class="normal">NORMAL</strong><br><small>${esc(f.flow_id)} • ${esc(f.src_ip)} → ${esc(f.dst_ip)} • latency ${Number(e.latency_ms).toFixed(3)} ms</small>`;
+      $('events').prepend(row); while ($('events').children.length > 500) $('events').lastChild.remove();
+      renderStats();
+    }
+    function showSummary(s) {
+      const classes = Object.entries(s.threat_classes || {}).map(([k, v]) => `${esc(k)}: ${v}`).join('<br>') || 'None';
+      const sev = Object.entries(s.severity_counts || {}).map(([k, v]) => `${esc(k)}: ${v}`).join('<br>') || 'None';
+      $('summary').innerHTML = `<div class="summary-item"><b>Total events</b><br>${s.flows || 0}</div><div class="summary-item"><b>Normal</b><br>${s.normal_flows || 0}</div><div class="summary-item"><b>Alerts</b><br>${s.alert_count || 0}</div><div class="summary-item"><b>Average latency</b><br>${Number(s.average_latency_ms || 0).toFixed(3)} ms</div><div class="summary-item"><b>Threat classes</b><br>${classes}</div><div class="summary-item"><b>Severity</b><br>${sev}</div>`;
+    }
+    async function startSim() {
+      try {
+        resetView();
+        const scenario = $('scenario').value, rate = Math.max(1, Math.min(500, Number($('rate').value) || 20)), seconds = Math.max(0, Math.min(3600, Number($('seconds').value) || 0));
+        const r = await api('/api/simulation/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scenario, rate, seconds }) });
+        $('simstatus').textContent = seconds === 0 ? 'Running continuously — press Stop to finish and save this run.' : `Running for ${seconds} seconds.`;
+      } catch (e) { $('simstatus').textContent = 'Error: ' + e.message }
+    }
+    async function stopSim() {
+      try { await api('/api/simulation/stop', { method: 'POST' }); $('simstatus').textContent = 'Stop requested. Current run will be saved.'; loadRuns() } catch (e) { $('simstatus').textContent = 'Error: ' + e.message }
+    }
+    async function uploadPcap() {
+      const f = $('pcap').files[0]; if (!f) { $('pcapstatus').textContent = 'Choose a PCAP file first.'; return }
+      try {
+        resetView(); $('pcapstatus').textContent = 'Traversing PCAP offline...';
+        const fd = new FormData(); fd.append('file', f);
+        const r = await api('/api/pcap', { method: 'POST', body: fd });
+        showSummary(r.summary); $('pcapstatus').textContent = `Completed: ${r.packets_traversed} packets/events traversed. Run ${r.run_id} saved.`;
+        loadRuns();
+      } catch (e) { $('pcapstatus').textContent = 'Error: ' + e.message }
+    }
+    async function loadRuns() {
+      try {
+        const r = await api('/api/runs'); $('runs').innerHTML = (r.runs || []).map(x => `<div class="runrow" onclick="openRun('${esc(x.name)}')"><b>${esc(x.name)}</b><br><small>${x.summary.flows || 0} events • ${x.summary.alert_count || 0} alerts • ${(x.summary.average_latency_ms || 0).toFixed?.(3) || x.summary.average_latency_ms || 0} ms avg</small></div>`).join('') || '<div class="muted">No saved runs.</div>';
+      } catch (e) { }
+    }
+    async function openRun(id) {
+      try {
+        const r = await api('/api/runs/' + encodeURIComponent(id) + '/events'); resetView();
+        (r.events || []).forEach(e => addEvent(e)); showSummary(r.summary || {});
+      } catch (e) { alert(e.message) }
+    }
+    function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])) }
+    const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws');
+    ws.onmessage = e => { const x = JSON.parse(e.data); if (x.type === 'flow_result') addEvent(x); if (x.type === 'run_complete') { showSummary(x.summary); loadRuns(); $('simstatus').textContent = 'Run completed and saved.' } };
+    init();
+  </script>
+</body>
+
+</html>

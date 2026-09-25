@@ -1,0 +1,20 @@
+{
+  "flows": 716,
+  "normal_flows": 0,
+  "alert_count": 716,
+  "average_latency_ms": 1.7,
+  "average_end_to_end_latency_ms": 1.7,
+  "threat_classes": {
+    "Recon / port scan": 716
+  },
+  "severity_counts": {
+    "high": 716
+  },
+  "detection_methods": {
+    "machine_learning": 4,
+    "behavioural_rule": 712
+  },
+  "run_type": "simulation",
+  "run_id": "20260926_002007_965618",
+  "completed_at": "2026-09-25T18:50:53.851546+00:00"
+}

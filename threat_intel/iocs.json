@@ -1,0 +1,5 @@
+{
+  "ips": {"203.0.113.66": "demo malicious destination IOC", "198.51.100.44": "demo C2 IOC"},
+  "domains": {"malware-demo.example": "demo domain IOC"},
+  "tls_fingerprints": {"RARE-JA4-C2": "demo suspicious encrypted-session fingerprint"}
+}

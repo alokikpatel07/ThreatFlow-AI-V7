@@ -1,0 +1,8 @@
+{
+  "name": "one-way-threat-detection-frontend",
+  "private": true,
+  "version": "7.0.0",
+  "type": "module",
+  "scripts": {"dev":"vite","build":"vite build"},
+  "dependencies": {"@vitejs/plugin-react":"latest","vite":"latest","react":"latest","react-dom":"latest"}
+}

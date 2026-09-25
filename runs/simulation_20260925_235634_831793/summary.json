@@ -1,0 +1,13 @@
+{
+  "flows": 21,
+  "normal_flows": 21,
+  "alert_count": 0,
+  "average_latency_ms": 145.705,
+  "average_end_to_end_latency_ms": 145.705,
+  "threat_classes": {},
+  "severity_counts": {},
+  "detection_methods": {},
+  "run_type": "simulation",
+  "run_id": "20260925_235634_831793",
+  "completed_at": "2026-09-25T18:26:39.228360+00:00"
+}

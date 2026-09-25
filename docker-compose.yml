@@ -1,0 +1,12 @@
+services:
+  detector:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      ALLOW_EXTERNAL_LAB_TOOLS: "0"
+    read_only: true
+    tmpfs:
+      - /tmp
