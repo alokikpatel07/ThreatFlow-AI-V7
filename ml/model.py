@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, confusion_matrix
 from sklearn.model_selection import train_test_split
 from backend.features import FEATURE_NAMES, extract_features
-from backend.simulator import FlowSimulator, SCENARIOS
+from backend.simulator import FlowSimulator
 
 ROOT=Path(__file__).resolve().parent.parent
 MODEL_PATH=ROOT/'models'/'threat_model.joblib'

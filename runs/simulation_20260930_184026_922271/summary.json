@@ -1,0 +1,26 @@
+{
+  "flows": 185,
+  "normal_flows": 100,
+  "alert_count": 85,
+  "average_latency_ms": 46.79,
+  "threat_classes": {
+    "DGA domain anomaly": 2,
+    "DNS tunnelling": 3,
+    "SYN flood": 1,
+    "Recon / port scan": 61,
+    "Possible data exfiltration": 12,
+    "Encrypted-session metadata anomaly": 6
+  },
+  "severity_counts": {
+    "high": 78,
+    "critical": 1,
+    "medium": 6
+  },
+  "detection_methods": {
+    "behavioural_rule": 81,
+    "machine_learning": 4
+  },
+  "run_type": "simulation",
+  "run_id": "20260930_184026_922271",
+  "completed_at": "2026-09-30T13:10:46.780549+00:00"
+}

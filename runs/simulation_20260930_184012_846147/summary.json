@@ -1,0 +1,18 @@
+{
+  "flows": 56,
+  "normal_flows": 0,
+  "alert_count": 56,
+  "average_latency_ms": 0.335,
+  "threat_classes": {
+    "DNS tunnelling": 56
+  },
+  "severity_counts": {
+    "high": 56
+  },
+  "detection_methods": {
+    "behavioural_rule": 56
+  },
+  "run_type": "simulation",
+  "run_id": "20260930_184012_846147",
+  "completed_at": "2026-09-30T13:10:16.328972+00:00"
+}

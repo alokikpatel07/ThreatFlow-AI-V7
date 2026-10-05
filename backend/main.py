@@ -5,7 +5,7 @@ import json
 import shutil
 import subprocess
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,7 +40,6 @@ state = {
     "alerts": 0,
     "normal": 0,
     "latency_ms_sum": 0.0,
-    "end_to_end_latency_ms_sum": 0.0,
     "source": None,
     "run_id": None,
     "run_path": None,
@@ -66,7 +65,6 @@ def reset_runtime():
         alerts=0,
         normal=0,
         latency_ms_sum=0.0,
-        end_to_end_latency_ms_sum=0.0,
         source=None,
         run_id=None,
         run_path=None,
@@ -94,11 +92,9 @@ def process_flow(flow: Flow, source: str, path: Path) -> dict:
     started = time.perf_counter()
     alert = detector.process(flow.model_dump())
     latency_ms = (time.perf_counter() - started) * 1000.0
-    end_to_end_ms = latency_ms
 
     state["flows"] += 1
     state["latency_ms_sum"] += latency_ms
-    state["end_to_end_latency_ms_sum"] += end_to_end_ms
     if alert:
         state["alerts"] += 1
     else:
@@ -111,7 +107,6 @@ def process_flow(flow: Flow, source: str, path: Path) -> dict:
         "alert": alert,
         "normal": alert is None,
         "latency_ms": round(latency_ms, 3),
-        "end_to_end_latency_ms": round(end_to_end_ms, 3),
         "processed_at": now(),
     }
     write_event(path, event)
@@ -124,7 +119,6 @@ def build_summary() -> dict:
         "normal_flows": state["normal"],
         "alert_count": state["alerts"],
         "average_latency_ms": round(state["latency_ms_sum"] / state["flows"], 3) if state["flows"] else 0.0,
-        "average_end_to_end_latency_ms": round(state["end_to_end_latency_ms_sum"] / state["flows"], 3) if state["flows"] else 0.0,
         "threat_classes": dict(
             Counter(a["threat_class"] for a in detector.alert_history)
         ),
@@ -206,8 +200,7 @@ async def scenarios():
 @app.get("/api/state")
 async def api_state():
     avg = state["latency_ms_sum"] / state["flows"] if state["flows"] else 0.0
-    e2e = state["end_to_end_latency_ms_sum"] / state["flows"] if state["flows"] else 0.0
-    return {**state, "average_latency_ms": round(avg, 3), "average_end_to_end_latency_ms": round(e2e, 3)}
+    return {**state, "average_latency_ms": round(avg, 3)}
 
 
 @app.get("/api/runs")
@@ -273,9 +266,17 @@ async def start_simulation(start: StartSimulation):
 
 @app.post("/api/simulation/stop")
 async def stop_simulation():
+    global active_task
     if not state["running"]:
         return {"status": "not_running"}
     state["running"] = False
+    if active_task is not None and not active_task.done():
+        active_task.cancel()
+        try:
+            await active_task
+        except asyncio.CancelledError:
+            pass
+        active_task = None
     return {"status": "stopping"}
 
 

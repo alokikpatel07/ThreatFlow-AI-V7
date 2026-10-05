@@ -1,0 +1,23 @@
+{
+  "flows": 361,
+  "normal_flows": 184,
+  "alert_count": 177,
+  "average_latency_ms": 47.089,
+  "threat_classes": {
+    "Recon / port scan": 128,
+    "DGA domain anomaly": 2,
+    "Encrypted-session metadata anomaly": 34,
+    "Possible data exfiltration": 13
+  },
+  "severity_counts": {
+    "high": 143,
+    "medium": 34
+  },
+  "detection_methods": {
+    "machine_learning": 4,
+    "behavioural_rule": 173
+  },
+  "run_type": "simulation",
+  "run_id": "20260930_183905_342369",
+  "completed_at": "2026-09-30T13:09:44.310332+00:00"
+}
