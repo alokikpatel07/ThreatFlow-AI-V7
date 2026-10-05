@@ -13,7 +13,7 @@ def main():
         raise SystemExit(1)
 
     host = os.getenv("HOST", "127.0.0.1")
-    port = int(os.getenv("PORT", "8080"))
+    port = int(os.getenv("PORT", "5000"))
     url = f"http://{host}:{port}"
 
     def open_browser():
